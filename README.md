@@ -1,4 +1,4 @@
-# How to use this repository
+## How to use this repository
 
 Recommended strategy:
 * Create your own copy of this repository on your profile
