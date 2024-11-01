@@ -5,15 +5,12 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
 /**
  * Example class using {@link List} and {@link Map}.
  *
  */
-@SuppressWarnings("unused")
 public final class UseListsAndMaps {
 
     private static final int start = 1000;
