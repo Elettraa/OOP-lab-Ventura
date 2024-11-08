@@ -32,77 +32,77 @@ class TestMonthSorter {
     private static final int USUAL_MONTH = 30;
     private static final int LONG_MONTH = 31;
     private static final List<String> ALL_MONTHS_ORDERED = List.of(
-        "january",
-        "february",
-        "march",
-        "april",
-        "may",
-        "june",
-        "july",
-        "august",
-        "september",
-        "october",
-        "november",
-        "december"
-    );
+            "january",
+            "february",
+            "march",
+            "april",
+            "may",
+            "june",
+            "july",
+            "august",
+            "september",
+            "october",
+            "november",
+            "december");
 
-    private static final Map<String, Integer> MONTHLY_DAYS = new LinkedHashMap<>() {{ // NOPMD
-        // Class-initializer syntax
-        put("january", LONG_MONTH);
-        put("february", SHORT_MONTH);
-        put("march", LONG_MONTH);
-        put("april", USUAL_MONTH);
-        put("may", LONG_MONTH);
-        put("june", USUAL_MONTH);
-        put("july", LONG_MONTH);
-        put("august", LONG_MONTH);
-        put("september", USUAL_MONTH);
-        put("october", LONG_MONTH);
-        put("november", USUAL_MONTH);
-        put("december", LONG_MONTH);
-    }};
+    private static final Map<String, Integer> MONTHLY_DAYS = new LinkedHashMap<>() {
+        { // NOPMD
+            // Class-initializer syntax
+            put("january", LONG_MONTH);
+            put("february", SHORT_MONTH);
+            put("march", LONG_MONTH);
+            put("april", USUAL_MONTH);
+            put("may", LONG_MONTH);
+            put("june", USUAL_MONTH);
+            put("july", LONG_MONTH);
+            put("august", LONG_MONTH);
+            put("september", USUAL_MONTH);
+            put("october", LONG_MONTH);
+            put("november", USUAL_MONTH);
+            put("december", LONG_MONTH);
+        }
+    };
 
     private static final List<List<String>> EXPECTED_RESULTS = List.of(
-        ALL_MONTHS_ORDERED,
-        transform(ALL_MONTHS_ORDERED, new Function<>() {
-            @Override
-            public String call(final String input) {
-                return input.substring(0, 3);
-            }
-        }),
-        // test multiple entries
-        flattenTransform(ALL_MONTHS_ORDERED, new Function<String, List<String>>() {
-            @Override
-            public List<String> call(final String input) {
-                return List.of(input, input, input);
-            }
-        }),
-        transform(ALL_MONTHS_ORDERED, new Function<>() {
-            @Override
-            public String call(final String input) {
-                return input.toUpperCase(Locale.ROOT);
-            }
-        }),
-        select(ALL_MONTHS_ORDERED, new Function<>() {
-            @Override
-            public Boolean call(final String input) {
-                return input.startsWith("j");
-            }
-        }),
-        reject(ALL_MONTHS_ORDERED, new Function<>() {
-            @Override
-            public Boolean call(final String input) {
-                return input.endsWith("y");
-            }
-        }),
-        List.of("jan", "F", "march", "April", "JUNE", "July", "AUG", "Sept", "dec")
-    );
+            ALL_MONTHS_ORDERED,
+            transform(ALL_MONTHS_ORDERED, new Function<>() {
+                @Override
+                public String call(final String input) {
+                    return input.substring(0, 3);
+                }
+            }),
+            // test multiple entries
+            flattenTransform(ALL_MONTHS_ORDERED, new Function<String, List<String>>() {
+                @Override
+                public List<String> call(final String input) {
+                    return List.of(input, input, input);
+                }
+            }),
+            transform(ALL_MONTHS_ORDERED, new Function<>() {
+                @Override
+                public String call(final String input) {
+                    return input.toUpperCase(Locale.ROOT);
+                }
+            }),
+            select(ALL_MONTHS_ORDERED, new Function<>() {
+                @Override
+                public Boolean call(final String input) {
+                    return input.startsWith("j");
+                }
+            }),
+            reject(ALL_MONTHS_ORDERED, new Function<>() {
+                @Override
+                public Boolean call(final String input) {
+                    return input.endsWith("y");
+                }
+            }),
+            List.of("jan", "F", "march", "April", "JUNE", "July", "AUG", "Sept", "dec"));
 
     @Test
     void testSorting() {
         final var randomGenerator = new Random(1);
         final MonthSorter sorter = new MonthSorterNested();
-        for (final var expected: EXPECTED_RESULTS) {
+        for (final var expected : EXPECTED_RESULTS) {
             final var expectedDays = monthsToDays(expected);
             expectedDays.sort(new Comparator<>() {
                 @Override
@@ -129,8 +129,8 @@ class TestMonthSorter {
         final var ambiguous = Arrays.asList("J", "dec");
         final var illegal = Arrays.asList("sunny", "November");
         final var sorter = new MonthSorterNested();
-        for (final var target: List.of(ambiguous, illegal)) {
-            for (final var comparator: List.of(sorter.sortByDays(), sorter.sortByOrder())) {
+        for (final var target : List.of(ambiguous, illegal)) {
+            for (final var comparator : List.of(sorter.sortByDays(), sorter.sortByOrder())) {
                 assertThrows(IllegalArgumentException.class, makeExecutable(target, comparator));
             }
         }
@@ -151,12 +151,12 @@ class TestMonthSorter {
             public Integer call(final String input) {
                 var match = MONTHLY_DAYS.get(input);
                 if (match == null) {
-                    for (final var entry: MONTHLY_DAYS.entrySet()) {
+                    for (final var entry : MONTHLY_DAYS.entrySet()) {
                         if (entry.getKey().toLowerCase(Locale.ROOT).startsWith(input.toLowerCase(Locale.ROOT))) {
                             if (match != null) {
                                 throw new IllegalStateException(
-                                    "Ambiguous entry: " + input + " matches both " + match + " and " + entry.getKey()
-                                );
+                                        "Ambiguous entry: " + input + " matches both " + match + " and "
+                                                + entry.getKey());
                             }
                             match = entry.getValue();
                         }
